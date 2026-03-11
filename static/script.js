@@ -1,40 +1,49 @@
 const API = "http://127.0.0.1:8000"
 
-async function carregarTarefas() {
-    
-    let resposta = await fetch(API + "/tarefas")
-    let tarefas = await resposta.json()
+async function carregarTarefas(){
 
-    let lista = document.getElementById("lista")
-    lista.innerHTML = ""
+ let resposta = await fetch(API + "/tarefas")
+ let tarefas = await resposta.json()
 
-    tarefas.array.forEach(t => {
-        
-        let item = document.createElement("li")
-        item.innerHTML = t[1] + " "
+ let lista = document.getElementById("lista")
+ lista.innerHTML = ""
 
-        let btn = document.createElement("button")
-        btn.innerText = "Excluir"
+ tarefas.forEach(t => {
 
-        btn.onclick = () => deletarTarefa(t[0])
+  let item = document.createElement("li")
+  item.innerHTML = t[1] + " "
 
-        item.appendChild(btn)
+  let btn = document.createElement("button")
+  btn.innerText = "Excluir"
 
-        lista.appendChild(item)
-    });
+  btn.onclick = () => deletarTarefa(t[0])
+
+  item.appendChild(btn)
+
+  lista.appendChild(item)
+
+ })
+
 }
 
-async function criarTarefas() {
-    let titulo = document.getElementById("titulo").value
-    await fetch(API + "/tarefas?titulo=" + titulo, {method: "POST"})
+async function criarTarefa(){
 
-    carregarTarefas()
+ let titulo = document.getElementById("titulo").value
+
+ await fetch(API + "/tarefas?titulo=" + titulo, {
+  method: "POST"
+ })
+
+ carregarTarefas()
 }
 
-async function deletarTarefa(id) {
-    await fetch(API + "/tarefas/" + id, {method: "DELETE"})
+async function deletarTarefa(id){
 
-    carregarTarefas()
+ await fetch(API + "/tarefas/" + id,{
+  method:"DELETE"
+ })
+
+ carregarTarefas()
 }
 
 carregarTarefas()
